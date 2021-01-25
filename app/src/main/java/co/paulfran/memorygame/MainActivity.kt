@@ -26,6 +26,11 @@ class MainActivity : AppCompatActivity(), GameFragment.GameFragmentListener {
         return tilesArray
     }
 
+    override fun tileTapped(tile: Tile, index: Int) {
+        tile.tileStatus = Status.FLIPPED
+        tile.updateTile()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

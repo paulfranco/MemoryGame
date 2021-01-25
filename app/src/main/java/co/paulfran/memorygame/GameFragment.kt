@@ -17,6 +17,7 @@ class GameFragment : Fragment() {
 
     interface GameFragmentListener {
         fun makeTiles(): ArrayList<Tile>
+        fun tileTapped(tile: Tile, index: Int)
     }
 
     private lateinit var caller: GameFragmentListener
@@ -75,6 +76,11 @@ class GameFragment : Fragment() {
             thisTile.textSize = 24F
 
             holder.tileParent.addView(thisTile)
+
+            holder.tileParent.setOnClickListener {
+                caller.tileTapped(thisTile, position)
+            }
+
         }
 
 
