@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class GameFragment : Fragment() {
+class GameFragment(var gridSize: Int) : Fragment() {
 
     interface GameFragmentListener {
         fun makeTiles(): ArrayList<Tile>
@@ -39,7 +39,8 @@ class GameFragment : Fragment() {
 
         val context = activity as Context
         val recyclerView: RecyclerView = frag.findViewById(R.id.gameRv)
-        recyclerView.layoutManager = GridLayoutManager(context, 4)
+
+        recyclerView.layoutManager = GridLayoutManager(context, gridSize)
 
         val tiles = caller.makeTiles()
         recyclerView.adapter = GameRecyclerAdapter(tiles)
@@ -48,8 +49,8 @@ class GameFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): GameFragment {
-            return GameFragment()
+        fun newInstance(grid: Int): GameFragment {
+            return GameFragment(grid)
         }
     }
 

@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
-
-
+import androidx.databinding.DataBindingUtil
+import co.paulfran.memorygame.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), GameFragment.GameFragmentListener {
 
+    private var gridSize = 4
+
+    private lateinit var binding: ActivityMainBinding
     private val tilesArray: ArrayList<Tile> = ArrayList()
     private var thisIsSecondTap = false
     private lateinit var tile1: Tile
@@ -18,12 +21,26 @@ class MainActivity : AppCompatActivity(), GameFragment.GameFragmentListener {
     private var gameIsActive = true
     private val foundTiles: ArrayList<Tile> = ArrayList()
 
-    override fun makeTiles(): ArrayList<Tile> {
-        for (i in 1..16) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        restartGame()
+
+        binding.restartBtn.setOnClickListener {
+            restartGame()
+        }
+
+    }
+
+    override fun makeTiles(): ArrayList<Tile> {
+        val totalGrid = gridSize * gridSize
+        val halfGrid = totalGrid / 2
+        
+        for (i in 1..totalGrid) {
             var num = i
-            if (num > 8) {
-                num -= 8
+            if (num > halfGrid) {
+                num -= halfGrid
             }
 
             val newTile = Tile(this, num)
@@ -57,7 +74,7 @@ class MainActivity : AppCompatActivity(), GameFragment.GameFragmentListener {
         }
     }
 
-    fun compare() {
+    private fun compare() {
         if (tile1.value == tile2.value) {
             tile1.tileStatus = Status.FOUND
             tile2.tileStatus = Status.FOUND
@@ -68,7 +85,7 @@ class MainActivity : AppCompatActivity(), GameFragment.GameFragmentListener {
             foundTiles.add(tile1)
             foundTiles.add(tile2)
 
-            if (foundTiles.size == 16) {
+            if (foundTiles.size == gridSize * gridSize) {
                 // won game
                 Toast.makeText(this, "YOU WON", Toast.LENGTH_LONG).show()
             }
@@ -82,13 +99,20 @@ class MainActivity : AppCompatActivity(), GameFragment.GameFragmentListener {
         gameIsActive = true
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private fun restartGame() {
 
+        gameIsActive = true
+        thisIsSecondTap = false
+        foundTiles.clear()
+
+        val frag = supportFragmentManager.findFragmentByTag("game")
+        if (frag != null) {
+            supportFragmentManager.beginTransaction().remove(frag).commit()
+        }
         supportFragmentManager
-            .beginTransaction()
-            .add(R.id.gameLayout, GameFragment.newInstance(), "game")
-            .commit()
+                .beginTransaction()
+                .add(R.id.gameLayout, GameFragment.newInstance(gridSize), "game")
+                .commit()
+
     }
 }
