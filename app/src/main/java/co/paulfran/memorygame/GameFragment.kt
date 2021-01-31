@@ -67,6 +67,7 @@ class GameFragment(var gridSize: Int) : Fragment() {
         }
 
         override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+
             val thisTile = inputData[position]
 
             val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -83,7 +84,6 @@ class GameFragment(var gridSize: Int) : Fragment() {
             }
 
         }
-
 
         override fun getItemCount(): Int = inputData.size
     }

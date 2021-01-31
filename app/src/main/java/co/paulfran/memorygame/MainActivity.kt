@@ -38,23 +38,6 @@ class MainActivity : AppCompatActivity(), GameFragment.GameFragmentListener {
     }
 
     override fun tileTapped(tile: Tile, index: Int) {
-
-        if (!gameIsActive || tile.tileStatus == Status.FLIPPED || tile.tileStatus == Status.FOUND) {
-            return
-        }
-        tile.tileStatus = Status.FLIPPED
-        tile.updateTile()
-
-        if (!thisIsSecondTap) { // first tap
-            tile1 = tile
-            thisIsSecondTap = true
-        } else {                // second tap
-            tile2 = tile
-            thisIsSecondTap = false
-            gameIsActive = false
-            Handler().postDelayed({
-                compare()
-            }, 1000)
-        }
+        return onTileTapped(tile, index)
     }
 }
