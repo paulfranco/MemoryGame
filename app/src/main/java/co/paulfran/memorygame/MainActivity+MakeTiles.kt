@@ -1,6 +1,9 @@
 package co.paulfran.memorygame
 
 fun MainActivity.extendedMakeTiles(): ArrayList<Tile> {
+
+    tilesArray.clear()
+
     val totalGrid = gridSize * gridSize
     val halfGrid = totalGrid / 2
 
